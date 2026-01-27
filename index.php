@@ -14,20 +14,25 @@ try {
     $jokes_table = new DatabaseTable($pdo, 'joke', 'id');
     $author_table = new DatabaseTable($pdo, 'author', 'id');
 
-    $joke_controller = new JokeController($jokes_table, $author_table);
-
     $action = $_GET['action'] ?? 'home';
 
+    $controller_name = $_GET['controller'] ?? 'joke';
+
+    if ($controller_name == 'joke') {
+        $controller = new JokeController($jokes_table, $author_table);
+    }
+    elseif ($controller_name == 'author') {
+        $controller = new AuthorController($author_table);
+    }
+
     if ($action == strtolower($action)) {
-        $joke_controller->$action();
+        $page = $controller->$action();
     }
     else {
         http_response_code(302);
         header('index.php?action='.strtolower($action));
         exit;
     }
-
-    $page = $joke_controller->$action();
 
     $title = $page['title'];
     $variables = $page['variables'] ?? [];
