@@ -9,7 +9,9 @@ function loadTemplate($TemplateFileName, $variables = []) {
 try {
     include 'includes/DatabaseConnection.php';
     include 'classes/DatabaseTable.php';
+
     include 'controllers/JokeController.php';
+    include 'controllers/AuthorController.php';
 
     $jokes_table = new DatabaseTable($pdo, 'joke', 'id');
     $author_table = new DatabaseTable($pdo, 'author', 'id');
@@ -25,12 +27,14 @@ try {
         $controller = new AuthorController($author_table);
     }
 
-    if ($action == strtolower($action)) {
+    if ($action == strtolower($action) && 
+    $controller_name ==  strtolower($controller_name)) {
         $page = $controller->$action();
     }
     else {
-        http_response_code(302);
-        header('index.php?action='.strtolower($action));
+        http_response_code(301);
+        header('index.php?controller='.strtolower($controller_name).
+        '&action='.strtolower($action));
         exit;
     }
 
