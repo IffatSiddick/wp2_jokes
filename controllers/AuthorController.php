@@ -32,6 +32,7 @@ class AuthorController {
             if (count($this->authorTable->find('email', $author['email'])) > 0) {
                 $errors[] = "This email has already been registered";
             }
+            # check for password length - must be > 12 characters
             else {
                 $author['email'] = strtolower($author['email']);
             }
@@ -41,6 +42,7 @@ class AuthorController {
         }
 
         if (empty($errors)) {
+            $author['password'] = password_hash($password, PASSWORD_DEFAULT);;
             $this->authorTable->save($author);
             header('location: index.php?controller=author&action=success');
         }
