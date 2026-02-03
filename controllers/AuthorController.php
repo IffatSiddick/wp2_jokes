@@ -3,7 +3,7 @@ class AuthorController {
     private DatabaseTable $AuthorTable;
 
     public function __construct(DatabaseTable $authorsTable) {
-        $this->AuthorTable = $authorsTable;
+        $this->authorTable = $authorsTable;
     }
 
     public function registrationform() {
@@ -11,6 +11,13 @@ class AuthorController {
             'template' => 'register.html.php',
             'title' => 'Register an account!'
         ];
+    }
+
+    public function regFormSubmit() {
+        $author = $_POST['author'];
+
+        $this->authorTable->save($author);
+        header('location: index.php?controller=author&action=success');
     }
 
     public function success() {
