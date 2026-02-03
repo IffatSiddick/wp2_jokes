@@ -16,8 +16,32 @@ class AuthorController {
     public function regFormSubmit() {
         $author = $_POST['author'];
 
-        $this->authorTable->save($author);
-        header('location: index.php?controller=author&action=success');
+        #checking for errors
+        $errors = [];
+
+        if (empty($author['name'])) {
+            $errors[] = "Name cannot be empty.";
+        }
+
+        if (empty($author['email'])) {
+            $errors[] = "Email cannot be empty.";
+        }
+
+        if (empty($author['password'])) {
+            $errors[] = "Password cannot be empty.";
+        }
+
+        if (empty($errors)) {
+            $this->authorTable->save($author);
+            header('location: index.php?controller=author&action=success');
+        }
+        else {
+            return [
+            'template' => 'register.html.php',
+            'title' => 'Register an account!',
+            'variables' => ['errors' => $errors]
+        ];
+        }
     }
 
     public function success() {
