@@ -9,22 +9,28 @@ function loadTemplate($TemplateFileName, $variables = []) {
 try {
     include 'includes/DatabaseConnection.php';
     include 'classes/DatabaseTable.php';
+    include 'classes/Authentication.php';
 
     include 'controllers/JokeController.php';
     include 'controllers/AuthorController.php';
+    include 'controllers/Login.php';
 
     $jokes_table = new DatabaseTable($pdo, 'joke', 'id');
     $author_table = new DatabaseTable($pdo, 'author', 'id');
+    $authentication = new Authentication($author_table, 'email', 'password');
 
     $action = $_GET['action'] ?? 'home';
 
     $controller_name = $_GET['controller'] ?? 'joke';
 
     if ($controller_name == 'joke') {
-        $controller = new JokeController($jokes_table, $author_table);
+        $controller = new JokeController($jokes_table, $author_table, $authentication);
     }
     elseif ($controller_name == 'author') {
         $controller = new AuthorController($author_table);
+    }
+    elseif ($controller_name == 'login') {
+        $controller = new Login($authentication);
     }
 
     if ($action == strtolower($action) && 

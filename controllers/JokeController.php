@@ -3,7 +3,8 @@ class JokeController {
     private DatabaseTable $JokeTable;
     private DatabaseTable $AuthorTable;
 
-    public function __construct(DatabaseTable $JokeTable, DatabaseTable $AuthorTable) {
+    public function __construct(DatabaseTable $JokeTable, DatabaseTable $AuthorTable,
+    private Authentication $authentication) {
         $this->JokeTable = $JokeTable;
         $this->AuthorTable = $AuthorTable;
     }
@@ -47,28 +48,34 @@ class JokeController {
     }
 
     public function edit() {
-        if (isset($_POST['joke'])){
-            $joke = $_POST['joke'];
-            $joke['jokedate'] = date('Y-m-d');
-            $joke['authorId'] =1;
-
-            $this->JokeTable->save($joke); 
-
-            header('location: index.php?controller=joke&action=list');
-        } 
+        if (!$this->authentication->isLoggedIn()) {
+            return ['template' => 'error.html.php', 
+            'title'=>'You are not authorised to use this page.'];
+        }
         else {
-            if (isset($_GET['id'])) {
-                $joke = $this->JokeTable->find('id', $_GET['id'])[0] ?? null;
-            }
-            else {
-                $joke = null;
-            }
-            $title = 'Edit Joke';
+            if (isset($_POST['joke'])){
+                $joke = $_POST['joke'];
+                $joke['jokedate'] = date('Y-m-d');
+                $joke['authorId'] =1;
 
-            return ['template' => 'editjoke.html.php',
-                'title'=>$title,
-                'variables' => ['joke' => $joke]
-            ];
+                $this->JokeTable->save($joke); 
+
+                header('location: index.php?controller=joke&action=list');
+            } 
+            else {
+                if (isset($_GET['id'])) {
+                    $joke = $this->JokeTable->find('id', $_GET['id'])[0] ?? null;
+                }
+                else {
+                    $joke = null;
+                }
+                $title = 'Edit Joke';
+
+                return ['template' => 'editjoke.html.php',
+                    'title'=>$title,
+                    'variables' => ['joke' => $joke]
+                ];
+            }
         }
     }
 }

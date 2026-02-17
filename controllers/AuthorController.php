@@ -59,6 +59,7 @@ class AuthorController {
     }
 
     public function success() {
+        
         return [
             'template' => 'registerSuccess.html.php',
             'title' => 'Registration successful!'

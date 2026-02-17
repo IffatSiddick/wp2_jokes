@@ -13,7 +13,7 @@
                 <li><a href="index.php?controller=joke&amp;action=list">Jokes List</a></li>
                 <li><a href="index.php?controller=joke&amp;action=edit">Add a new joke</a></li>
                 <li><a href="index.php?controller=author&amp;action=registrationform">Register</a></li>
-
+                <li><a href="index.php?controller=login&amp;action=login">Log in</a></li>
             </ul>
         </nav>
         <main>
