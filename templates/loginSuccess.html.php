@@ -1,1 +1,1 @@
-<p>Log in successful. Welcome back.</p>
+<p>Log in successful. Welcome back <?= $author?>.</p>

@@ -6,7 +6,7 @@ class Authentication {
         session_start();
     }
 
-    public function login(string $username, string $password) {
+    public function login(string $username, string $password):bool {
         $user = $this->users->find($this->usernameColumn, strtolower($username));
 
         if (!empty($user) && password_verify($password, $user[0][$this->passwordColumn])) {
@@ -24,12 +24,21 @@ class Authentication {
         if (empty($_SESSION['username'])) {
             return false;
         }
-        $user = $this->users->find($this->usernameColumn, strtolower($username));
+        $user = $this->users->find($this->usernameColumn, strtolower($_SESSION['username']));
         if (!empty($user) && $user[0][$this->passwordColumn] === $_SESSION['password']) {
             return true;
         }
         else {
             return false;
+        }
+    }
+
+    public function getUser(): ?array {
+        if ($this->isLoggedIn()) {
+            return $this->users->find($this->usernameColumn, strtolower($_SESSION['username']));
+        }
+        else {
+            return null;
         }
     }
 

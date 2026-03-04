@@ -2,8 +2,9 @@
 class AuthorController {
     private DatabaseTable $authorTable;
 
-    public function __construct(DatabaseTable $inputTable) {
+    public function __construct(DatabaseTable $inputTable, private Authentication $authentication) {
         $this->authorTable = $inputTable;
+
     }
 
     public function registrationform() {
@@ -42,7 +43,7 @@ class AuthorController {
         }
 
         if (empty($errors)) {
-            $author['password'] = password_hash($password, PASSWORD_DEFAULT);;
+            $author['password'] = password_hash($author['password'], PASSWORD_DEFAULT);;
             $this->authorTable->save($author);
             header('location: index.php?controller=author&action=success');
         }
@@ -59,7 +60,7 @@ class AuthorController {
     }
 
     public function success() {
-        
+        $author = $this->authentication->getUser();
         return [
             'template' => 'registerSuccess.html.php',
             'title' => 'Registration successful!'

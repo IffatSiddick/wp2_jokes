@@ -27,7 +27,7 @@ try {
         $controller = new JokeController($jokes_table, $author_table, $authentication);
     }
     elseif ($controller_name == 'author') {
-        $controller = new AuthorController($author_table);
+        $controller = new AuthorController($author_table, $authentication);
     }
     elseif ($controller_name == 'login') {
         $controller = new Login($authentication);
@@ -45,6 +45,7 @@ try {
     }
 
     $title = $page['title'];
+    $loggedin = $authentication->isLoggedIn();
     $variables = $page['variables'] ?? [];
     $output = loadTemplate($page['template'], $variables);
 }

@@ -21,17 +21,21 @@ class JokeController {
                 'joketext' => $joke['joketext'],
                 'jokedate' => $joke['jokedate'],
                 'name' => $author['name'],
-                'email' => $author['email']
+                'email' => $author['email'],
+                'author' => $author['id']
             ];
         }
         $title = 'Joke list';
         $totalJokes = $this->JokeTable->total();
 
+        $user = $this->authentication->getUser();
+
         return ['template' => 'jokes.html.php', 
                 'title'=> $title,
                 'variables' => [
                     'totalJokes' => $totalJokes,
-                    'jokes' => $jokes
+                    'jokes' => $jokes,
+                    'userID' => $user['id'] ?? null
                     ]
                 ];
     }
@@ -54,9 +58,11 @@ class JokeController {
         }
         else {
             if (isset($_POST['joke'])){
+                $author = $this->authentication->getUser();
+
                 $joke = $_POST['joke'];
                 $joke['jokedate'] = date('Y-m-d');
-                $joke['authorId'] =1;
+                $joke['authorId'] = $author['id'];
 
                 $this->JokeTable->save($joke); 
 
@@ -70,10 +76,15 @@ class JokeController {
                     $joke = null;
                 }
                 $title = 'Edit Joke';
+                $user = $this->authentication->getUser();
 
                 return ['template' => 'editjoke.html.php',
                     'title'=>$title,
-                    'variables' => ['joke' => $joke]
+                    'variables' => [
+                        'joke' => $joke,
+                        'userID' => $user['id'] ?? null,
+                        'authorID' => $joke['authorid'] ?? null
+                    ]
                 ];
             }
         }
