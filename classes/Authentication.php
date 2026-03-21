@@ -35,7 +35,7 @@ class Authentication {
 
     public function getUser(): ?array {
         if ($this->isLoggedIn()) {
-            return $this->users->find($this->usernameColumn, strtolower($_SESSION['username']));
+            return $this->users->find($this->usernameColumn, strtolower($_SESSION['username']))[0];
         }
         else {
             return null;

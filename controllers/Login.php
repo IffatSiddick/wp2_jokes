@@ -14,7 +14,7 @@ class Login {
             $author = $this->authentication->getUser();
             return ['template' => 'loginSuccess.html.php',
             'title' => 'Login successful',
-            'variables' => ['author' => $author[0]['name']]
+            'variables' => ['author' => $author['name']]
             ];
         }
         else {

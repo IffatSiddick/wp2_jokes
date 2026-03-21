@@ -33,7 +33,6 @@ class AuthorController {
             if (count($this->authorTable->find('email', $author['email'])) > 0) {
                 $errors[] = "This email has already been registered";
             }
-            # check for password length - must be > 12 characters
             else {
                 $author['email'] = strtolower($author['email']);
             }

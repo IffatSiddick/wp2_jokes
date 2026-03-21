@@ -63,7 +63,7 @@ class JokeController {
                 $joke = $_POST['joke'];
                 $joke['jokedate'] = date('Y-m-d');
                 $joke['authorId'] = $author['id'];
-
+                
                 $this->JokeTable->save($joke); 
 
                 header('location: index.php?controller=joke&action=list');
